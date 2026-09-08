@@ -1,0 +1,91 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gold Hub — Uni 16 Sep</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f6fa;color:#171923;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#171821;color:#fff;padding:28px 20px}h1{margin:0;font-size:30px}header p{margin:6px 0 0;color:#cdd0d8}.wrap{max-width:1050px;margin:auto;padding:18px}
+.tabs{display:flex;gap:8px;overflow:auto;margin-bottom:15px}.tab{border:0;border-radius:12px;padding:11px 16px;font-weight:750;background:#e5e6eb}.tab.active{background:#171821;color:white}
+.card{background:#fff;border:1px solid #e1e2e7;border-radius:18px;padding:17px;margin:10px 0}.hero{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat b{font-size:28px;display:block}.muted{color:#687080;font-size:13px}.unit{margin:14px 0}.unit h3{margin:0;padding:12px 14px;background:#fff;border-radius:15px 15px 0 0;border:1px solid #e1e2e7}.topic{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e8e8ec;border-top:0;padding:12px 14px}.topic input{width:20px;height:20px}.topic.done span{text-decoration:line-through;opacity:.5}.badge{margin-left:auto;border-radius:8px;padding:4px 7px;font-size:11px;font-weight:800}.gold{background:#ffe9a8}.must{background:#ffd9d9}.should{background:#fff0c9}.quick{background:#e9eaee}.search{width:100%;padding:13px;border:1px solid #dddfe5;border-radius:12px;font-size:15px;margin-bottom:10px}.day{padding:13px;border-left:4px solid #171821;margin:9px 0;background:#fff;border-radius:12px}.day strong{display:block}.schedule b{display:inline-block;min-width:105px}.note{line-height:1.5}.check{font-size:13px;margin-top:8px}
+@media(max-width:650px){.hero{grid-template-columns:1fr 1fr}h1{font-size:26px}}
+</style></head>
+<body>
+<header><h1>🏅 GOLD HUB</h1><p>Pathology • Pharmacology • Microbiology | Path exam: 14 Sep | University: 16 Sep</p></header>
+<div class="wrap">
+<div class="hero">
+<div class="card stat"><b id="done">0</b><span class="muted">Completed</span></div>
+<div class="card stat"><b id="total">0</b><span class="muted">Topics</span></div>
+<div class="card stat"><b id="pct">0%</b><span class="muted">Progress</span></div>
+<div class="card stat"><b>10h</b><span class="muted">Daily study target</span></div>
+</div>
+<div class="tabs" id="tabs"></div>
+<input class="search" id="search" placeholder="Search topics...">
+<div id="app"></div>
+</div>
+<script>
+const subjects={
+"Pathology":{
+"General Pathology":["Cell injury & adaptation","Inflammation","Wound healing & repair","Hemodynamic disorders","Neoplasia","Immunopathology"],
+"Hematology":["Anemia: approach & classification","Iron deficiency anemia","Megaloblastic anemia","Hemolytic anemia","Sickle cell disease","Thalassemia","Aplastic anemia","Acute leukemia","AML","ALL","CML","CLL","Lymphoma","Multiple myeloma","Platelet disorders & coagulation"],
+"CVS":["Atherosclerosis & IHD","Myocardial infarction","Rheumatic heart disease","Infective endocarditis","Hypertension","Heart failure","Cardiomyopathies","Vascular disorders"],
+"Respiratory":["Pneumonia","Tuberculosis","COPD","Asthma","Bronchiectasis","ARDS","Lung carcinoma","Pleural disorders"],
+"GIT":["Gastritis","Peptic ulcer disease","Inflammatory bowel disease","Celiac disease","Appendicitis","Colorectal carcinoma","GI tumors"],
+"Hepatobiliary":["Viral hepatitis","Cirrhosis","Portal hypertension","Hepatocellular carcinoma","Gallstones & cholecystitis"],
+"Renal":["Nephritic syndrome","Nephrotic syndrome","RPGN","Acute kidney injury","Chronic kidney disease","Glomerulonephritis","Renal cell carcinoma"],
+"Endocrine":["Diabetes mellitus","Graves disease","Hashimoto thyroiditis","Thyroid carcinoma","Adrenal disorders"],
+"Skin & Soft Tissue":["Inflammation","Wound healing","Burns","Skin tumors","Melanoma"],
+"Reproductive":["Cervical carcinoma","Endometrial carcinoma","Ovarian tumors","Prostate pathology","Breast pathology"]
+},
+"Pharmacology":{
+"General":["Pharmacokinetics","Pharmacodynamics","Adverse drug reactions","Drug interactions"],
+"ANS":["Cholinergic drugs","Anticholinergics","Adrenergic drugs","Alpha blockers","Beta blockers","Neuromuscular blockers"],
+"CVS":["Antihypertensives","Antianginal drugs","Antiarrhythmics","Heart failure drugs","Diuretics","Lipid-lowering drugs"],
+"CNS":["Antiepileptics","Antipsychotics","Antidepressants","Anxiolytics","Parkinson drugs","Opioids","General anesthetics"],
+"Antimicrobial":["Cell wall inhibitors","DNA/RNA inhibitors","Protein synthesis inhibitors","Antitubercular drugs","Antimalarial drugs","Antifungals","Antivirals"],
+"Endocrine":["Insulin","Oral antidiabetics","Thyroid drugs","Corticosteroids","Sex hormones & contraceptives"],
+"GIT":["Antiulcer drugs","Antiemetics","Antidiarrheals","Laxatives"],
+"Blood":["Anticoagulants","Antiplatelets","Fibrinolytics","Drugs for anemia"]
+},
+"Microbiology":{
+"General & Immunology":[
+["Sterilization & disinfection","GOLD"],["Antimicrobial resistance & AST","GOLD"],["Gene transfer","GOLD"],["PCR / molecular methods","GOLD"],["Hypersensitivity","GOLD"],["Agglutination & antigen-antibody reactions","GOLD"],["Immunity","MUST"],["Vaccines / immunoprophylaxis","SHOULD"],["Hospital infection control","SHOULD"]],
+"Respiratory & CNS":[
+["Tuberculosis","GOLD"],["Diphtheria","GOLD"],["Meningitis / bacterial meningitis","MUST"],["Pneumonia / atypical pneumonia","MUST"],["Cryptococcal meningitis","MUST"],["Influenza","MUST"],["Measles / Rubella","SHOULD"],["Poliomyelitis","SHOULD"],["Rabies","MUST"]],
+"GI / Enteric":[
+["Typhoid","GOLD"],["Cholera","GOLD"],["Amoebiasis / Entamoeba","GOLD"],["Food poisoning","MUST"],["Shigellosis","MUST"],["Giardiasis","MUST"],["Hepatitis A / E","MUST"],["Rotavirus / gastroenteritis","SHOULD"]],
+"Blood / CVS / Systemic":[
+["Septicemia / bacteremia","MUST"],["Endocarditis","MUST"],["Malaria","GOLD"],["Dengue","MUST"],["Brucellosis","SHOULD"],["Tetanus","MUST"],["Gas gangrene","GOLD"]],
+"Hepatobiliary":[
+["Hepatitis B","GOLD"],["Hepatitis C","GOLD"],["Hepatitis D / E","MUST"],["Liver abscess","MUST"]],
+"Urinary":[
+["UTI / E. coli","MUST"],["Pyelonephritis","MUST"],["Leptospirosis","SHOULD"]],
+"Genital / STI":[
+["Syphilis","MUST"],["Gonorrhoea","MUST"],["Chlamydia","MUST"],["Genital herpes","MUST"],["HPV / cervical cancer","MUST"],["Trichomoniasis","SHOULD"]],
+"Skin & Soft Tissue":[
+["Leprosy","GOLD"],["Staphylococcal skin infections","MUST"],["Streptococcal skin infections","MUST"],["Dermatophytosis","MUST"],["Candida","MUST"],["Mucormycosis","MUST"],["Mycetoma","SHOULD"]],
+"Other high-yield":[
+["HIV / AIDS","GOLD"],["Herpes simplex / VZV","GOLD"],["EBV","MUST"],["Cytomegalovirus","SHOULD"],["Toxoplasmosis","SHOULD"],["Echinococcosis / hydatid disease","GOLD"],["Leishmaniasis","GOLD"],["Filariasis","MUST"],["Taenia solium / cysticercosis","MUST"],["Ascaris / hookworm","MUST"]]
+}
+};
+let subject=localStorage.getItem("gh_subject")||"Pathology";
+let state=JSON.parse(localStorage.getItem("gh_state")||"{}");
+function k(u,t){return subject+"|"+u+"|"+t}
+function save(){localStorage.gh_subject=subject;localStorage.gh_state=JSON.stringify(state)}
+function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(){
+document.getElementById("tabs").innerHTML=Object.keys(subjects).map(s=>`<button class="tab ${s==subject?"active":""}" onclick="subject='${s}';save();render()">${s}</button>`).join("");
+let q=document.getElementById("search").value.toLowerCase(), total=0,completed=0,out="";
+Object.entries(subjects[subject]).forEach(([unit,items])=>{
+let rows="";
+items.forEach(item=>{
+let t=Array.isArray(item)?item[0]:item, pri=Array.isArray(item)?item[1]:"";
+if(q&&!(`${unit} ${t}`).toLowerCase().includes(q))return;
+total++;let checked=!!state[k(unit,t)];if(checked)completed++;
+rows+=`<div class="topic ${checked?"done":""}"><input type="checkbox" ${checked?"checked":""} onchange="state['${k(unit,t).replaceAll("'","\\'")}']=this.checked;save();render()"><span>${esc(t)}</span>${pri?`<span class="badge ${pri.toLowerCase()}">${pri=="GOLD"?"🔴 GOLD":pri}</span>`:""}</div>`;
+});
+if(rows)out+=`<div class="unit"><h3>${esc(unit)}</h3>${rows}</div>`;
+});
+document.getElementById("app").innerHTML=out;
+document.getElementById("done").textContent=completed;document.getElementById("total").textContent=total;document.getElementById("pct").textContent=total?Math.round(completed/total*100)+"%":"0%";
+}
+document.getElementById("search").oninput=render;render();
+</script></body></html>
